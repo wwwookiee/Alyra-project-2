@@ -392,6 +392,16 @@ describe("Test of Voting.sol", function() {
                 await expect(instancedContract.setVote(0)).to.be.revertedWith('You\'re not a voter');
             });
 
+            // Test this satement : emit Voted(msg.sender, _id); (line 94);
+            it('should emit Voted event', async function() {
+                // Call the function addVoter() and check if the event VoterRegistered is emitted.
+                await expect(deployedContract.setVote(1))
+                .to.emit(deployedContract, 'Voted')
+                .withArgs(
+                    owner.address,
+                    1
+                );
+            });
         });
 
         context("Test the endVotingSession() function", function() {
@@ -561,7 +571,7 @@ describe("Test of Voting.sol", function() {
         });
 
         context("Test the revert of state handlers functions", function() {
-            
+
             beforeEach(async function() {
                 // Call the tallyVotes() function.
                 await deployedContract.tallyVotes();
